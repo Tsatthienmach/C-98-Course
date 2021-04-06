@@ -1,8 +1,10 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
+#define DEBUG(x) cout << #x << " " << x << endl
 
-void printArray(int arr[], int length)
+void printArray(vector<int> arr, int length)
 {
     cout << "Length: "<< length << endl;
     cout << "[";
@@ -13,12 +15,15 @@ void printArray(int arr[], int length)
     cout << arr [length-1]<< "]"<< endl;
 }
 
-int cal_size(int * arr)
+int cal_size(vector<int> arr)
 {
-    return sizeof(arr);
+    // cout << "------" << sizeof(arr) / sizeof(arr[0]) << endl;
+    // cout << "------" << sizeof(arr) << endl;
+    // cout << "------" << sizeof(arr[0]) << endl;
+    return arr.size();
 }
 
-void merge(int arr[], int left_idx, int middle_idx, int right_idx)
+void merge(vector<int> arr, int left_idx, int middle_idx, int right_idx)
 {
     cout << "Left index: " << left_idx << endl;
     cout << "Right index: " << right_idx << endl;
@@ -27,18 +32,21 @@ void merge(int arr[], int left_idx, int middle_idx, int right_idx)
     int right_length = right_idx - middle_idx;
     cout << "-----> left l" << left_length << "\tR l: "<< right_length << endl;
     // Creates two subarrays
-    int left_array[left_length];
-    int right_array[right_length];
+    vector<int> left_array(left_length);
+    vector<int> right_array(right_length);
     for (int i = 0; i < left_length; i++)
     {
         cout << "Element : "<< arr[left_idx + i] << "\t";
         left_array[i] = arr[left_idx + i]; 
     }
-    for (int i = 0; i < right_idx; i++)
+    cout << endl;
+    for (int i = 0; i < right_length; i++)
     {
+        cout << "Element: " << arr[middle_idx + 1 + i] << "\t";
         right_array[i] = arr[middle_idx + 1 + i];
     }
     // Merges two sorted array
+    cout << endl << "Left array size of : "<< cal_size(left_array) << endl;
     cout << "Left array: "<<endl;
     printArray(left_array, cal_size(left_array));
     cout << "Right array: "<<endl;
@@ -73,24 +81,27 @@ void merge(int arr[], int left_idx, int middle_idx, int right_idx)
     }
 }
 
-void mergeSort(int arr[], int left_idx, int right_idx)
+void mergeSort(vector<int> arr, int left_idx, int right_idx)
 {
     if (left_idx >= right_idx)
         return;
     // cals middle index
     int middle_idx = left_idx + (right_idx - left_idx) / 2;
-    mergeSort(arr, left_idx, middle_idx);
-    mergeSort(arr, middle_idx + 1, right_idx);
+    // mergeSort(arr, left_idx, middle_idx);
+    // mergeSort(arr, middle_idx + 1, right_idx);
     merge(arr, left_idx, middle_idx, right_idx);
-    printArray(arr, cal_size(arr));
+    // printArray(arr, cal_size(arr));
 }
 
 int main()
 {
     // Init
-    int arr[] = {12, 67, 1, 56, 234, 906, 234, 0, 45};
+    vector<int> arr = {12, 67, 1, 56, 234, 906, 234, 0, 45};
+    DEBUG(sizeof(arr));
+    DEBUG(sizeof(arr[0]));
     printArray(arr, cal_size(arr));
     int length = cal_size(arr);
+    cout << endl << "Input Array Length : " << length <<endl;
     mergeSort(arr, 0, length - 1);
     return 0;
 }
